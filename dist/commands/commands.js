@@ -9,6 +9,6 @@ export async function runCommand(registry, cmdName, ...args) {
     if (!registry[cmdName]) {
         throw new Error(`${cmdName} is not a valid command.`);
     }
-    registry[cmdName](cmdName, ...args);
+    await registry[cmdName](cmdName, ...args);
 }
 ;

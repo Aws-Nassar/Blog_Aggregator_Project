@@ -1,5 +1,6 @@
-import{setUser} from "../config.js"
-import {createUser, getUser} from "../lib/db/queries/users";
+import { setUser } from "../config"
+import { readConfig } from "../config" 
+import { createUser, getUser, deleteAllUsers, getUsers } from "../lib/db/queries/users";
 
 export async function handlerLogin (cmdName: string, ...args: string[]) {
     if (args.length === 0)
@@ -20,7 +21,7 @@ export async function handlerLogin (cmdName: string, ...args: string[]) {
 export async function handlerRegister (cmdName: string, ...args: string[]) {
     if (args.length !== 1) {
         throw new Error(`usage: ${cmdName} <name>`);
-    }
+    } 
 
     const getQueryResult = await getUser(args[0]);
     if (getQueryResult !== undefined) {
@@ -33,3 +34,24 @@ export async function handlerRegister (cmdName: string, ...args: string[]) {
     console.log(createQueryResult);
     
 };
+
+export async function handlerReset(cmdName: string) {
+    try {
+        await deleteAllUsers();
+    } catch (error) {
+        throw new Error("An error occurred while blanking the table.")
+    }
+    console.log("The users table were blanked successfully.");
+};
+
+export async function handlerUsers(cmdName: string) {
+    try {
+        const users = await getUsers(); 
+        for (let i = 0; i < users.length; i++)
+        {
+            users[i].name == readConfig().currentUserName?console.log("* " + users[i].name + " (current)") : console.log("* " + users[i].name);
+        }
+    } catch (error) {
+        throw new Error("An error occurred while getting the users info.")
+    }
+}
