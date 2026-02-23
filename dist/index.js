@@ -1,8 +1,30 @@
-import { registerCommand, handlerLogin } from "./commands/commands.js";
+import { handlerLogin, handlerRegister } from "./commands/users";
+import { registerCommand, runCommand } from "./commands/commands";
 import process from "process";
-function main() {
+async function main() {
     let command = {};
     registerCommand(command, "login", handlerLogin);
-    console.log(process.argv);
+    registerCommand(command, "register", handlerRegister);
+    const args = process.argv.slice(2);
+    if (args.length < 1) {
+        console.log("no command provided");
+        process.exit(1);
+    }
+    const cmdName = args[0];
+    const cmdArgs = args.slice(1);
+    try {
+        await runCommand(command, cmdName, ...cmdArgs);
+    }
+    catch (err) {
+        if (err instanceof Error) {
+            console.log(err.message);
+            process.exit(1);
+        }
+        else {
+            console.log("An unexpected error occurred:", err);
+            process.exit(1);
+        }
+    }
+    process.exit(0);
 }
 main();
