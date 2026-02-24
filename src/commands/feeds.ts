@@ -1,7 +1,7 @@
 import { fetchFeed } from "../lib/rss";
 import { readConfig  } from "../config"
-import { getUser } from "../lib/db/queries/users";
-import { createFeed } from "../lib/db/queries/feeds";
+import { getUser, getUserById } from "../lib/db/queries/users";
+import { createFeed, getFeeds } from "../lib/db/queries/feeds";
 import {User, Feed} from "../lib/db/schema";
 
 export async function handlerAggregate(cmdName: string) {
@@ -31,7 +31,24 @@ export async function handlerAddFeed (cmdName: string, ...args: string[]) {
     printFeed(result, user);
 };  
 
-export function printFeed(feed: Feed, user:User) {
+function printFeed(feed: Feed, user:User) {
     console.log(`User Info: name: ${user.name}, ID: ${user.id}\n has created this/those feed/s:-`);
     console.log(`Feed: ${feed.name}, ${feed.id}, ${feed.url}, created at: ${feed.createdAt}, updated at: ${feed.updatedAt}`);
+}
+
+export async function handlerFeeds (cmdName: string) {
+    const feeds = await getFeeds();
+    if (!feeds)
+    {
+        throw new Error("Error occurred while fetching the feeds.");
+    }
+
+    for (const feed of feeds) {
+        const user = await getUserById(feed.user_id);
+        if (!user) {
+            throw new Error("Couldn't found the user who created the feed.");
+        }
+        console.log(`${feed.name}\n${feed.url}\n${user.name}`);
+    }
+    return;
 }
