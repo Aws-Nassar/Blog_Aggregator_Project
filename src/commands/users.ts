@@ -1,7 +1,6 @@
-import { setUser } from "../config"
-import { readConfig } from "../config" 
+import { setUser, readConfig  } from "../config"
 import { createUser, getUser, deleteAllUsers, getUsers } from "../lib/db/queries/users";
-import { fetchFeed } from "../lib/rss";
+
 
 export async function handlerLogin (cmdName: string, ...args: string[]) {
     if (args.length === 0)
@@ -57,7 +56,3 @@ export async function handlerUsers(cmdName: string) {
     }
 }
 
-export async function handlerAggregate(cmdName: string) {
-    const url = "https://www.wagslane.dev/index.xml";
-    console.log(JSON.stringify(await fetchFeed(url), null, 2));
-}

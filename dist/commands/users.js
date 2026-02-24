@@ -1,7 +1,5 @@
-import { setUser } from "../config";
-import { readConfig } from "../config";
+import { setUser, readConfig } from "../config";
 import { createUser, getUser, deleteAllUsers, getUsers } from "../lib/db/queries/users";
-import { fetchFeed } from "../lib/rss";
 export async function handlerLogin(cmdName, ...args) {
     if (args.length === 0) {
         throw new Error("Login handler expects a single argument, the username.");
@@ -48,7 +46,4 @@ export async function handlerUsers(cmdName) {
     catch (error) {
         throw new Error("An error occurred while getting the users info.");
     }
-}
-export async function handlerAggregate(url = "https://www.wagslane.dev/index.xml") {
-    console.log(JSON.stringify(fetchFeed(url), null, 2));
 }

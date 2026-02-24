@@ -1,4 +1,5 @@
-import { handlerLogin, handlerRegister, handlerReset, handlerUsers, handlerAggregate } from "./commands/users";
+import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./commands/users";
+import { handlerAggregate } from "./commands/feeds";
 import { registerCommand, runCommand } from "./commands/commands";
 import process from "process";
 async function main() {
