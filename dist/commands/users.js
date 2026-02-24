@@ -1,5 +1,7 @@
-import { setUser } from "../config.js";
-import { createUser, getUser, deleteAllUsers } from "../lib/db/queries/users";
+import { setUser } from "../config";
+import { readConfig } from "../config";
+import { createUser, getUser, deleteAllUsers, getUsers } from "../lib/db/queries/users";
+import { fetchFeed } from "../lib/rss";
 export async function handlerLogin(cmdName, ...args) {
     if (args.length === 0) {
         throw new Error("Login handler expects a single argument, the username.");
@@ -36,3 +38,17 @@ export async function handlerReset(cmdName) {
     console.log("The users table were blanked successfully.");
 }
 ;
+export async function handlerUsers(cmdName) {
+    try {
+        const users = await getUsers();
+        for (let i = 0; i < users.length; i++) {
+            users[i].name == readConfig().currentUserName ? console.log("* " + users[i].name + " (current)") : console.log("* " + users[i].name);
+        }
+    }
+    catch (error) {
+        throw new Error("An error occurred while getting the users info.");
+    }
+}
+export async function handlerAggregate(url = "https://www.wagslane.dev/index.xml") {
+    console.log(JSON.stringify(fetchFeed(url), null, 2));
+}

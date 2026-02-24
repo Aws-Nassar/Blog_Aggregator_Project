@@ -1,4 +1,4 @@
-import { handlerLogin, handlerRegister, handlerReset } from "./commands/users";
+import { handlerLogin, handlerRegister, handlerReset, handlerUsers, handlerAggregate } from "./commands/users";
 import { registerCommand, runCommand } from "./commands/commands";
 import process from "process";
 async function main() {
@@ -6,6 +6,8 @@ async function main() {
     registerCommand(command, "login", handlerLogin);
     registerCommand(command, "register", handlerRegister);
     registerCommand(command, "reset", handlerReset);
+    registerCommand(command, "users", handlerUsers);
+    registerCommand(command, "agg", handlerAggregate);
     const args = process.argv.slice(2);
     if (args.length < 1) {
         console.log("no command provided");

@@ -1,3 +1,4 @@
+import { foreignKey } from "drizzle-orm/gel-core";
 import { pgTable, timestamp, uuid, text } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
