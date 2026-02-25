@@ -1,6 +1,5 @@
 import { fetchFeed } from "../lib/rss";
-import { readConfig  } from "../config"
-import { getUser, getUserById } from "../lib/db/queries/users";
+import { getUserById } from "../lib/db/queries/users";
 import { createFeed, getFeeds } from "../lib/db/queries/feeds";
 import { createFeedFollow } from "../lib/db/queries/feedFollows";
 import {User, Feed} from "../lib/db/schema";

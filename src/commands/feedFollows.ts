@@ -1,7 +1,5 @@
-import { createFeedFollow, getFeedFollowsForUser } from "../lib/db/queries/feedFollows";
+import { createFeedFollow, getFeedFollowsForUser, deleteFeedFollow } from "../lib/db/queries/feedFollows";
 import { getFeedByURL } from "../lib/db/queries/feeds";
-import { readConfig  } from "../config"
-import { getUser } from "../lib/db/queries/users";
 import { User } from "src/lib/db/schema";
 
 export async function handlerFollow (cmdName: string,user: User, ...args: string[]) {
@@ -14,9 +12,9 @@ export async function handlerFollow (cmdName: string,user: User, ...args: string
         throw new Error("Couldn't find the feed that was created for the URL.");
     }
 
-    if (!feed.id || !feed.userId)
+    if (!feed.id || !user.id)
     {
-        throw new Error("Couldn't find user/feed id whose related to the feed.");
+        throw new Error("Couldn't find feed/ user id.");
     }
 
     const feedFollow = await createFeedFollow(user.id,feed.id);
@@ -39,4 +37,27 @@ export async function handlerFollowing (cmdName: string, user: User,) {
     feedFollows.forEach(element => {
         console.log(element.feedName);
     });
+}
+
+export async function handlerUnFollow (cmdName: string, user: User, ...args: string[]) {
+    if (args.length !== 1) {
+        throw new Error(`usage: ${cmdName} <url>`);
+    }
+
+    const feed = await getFeedByURL(args[0]);
+    if (!feed) {
+        throw new Error("Couldn't find the feed that was created for the URL.");
+    }
+
+    if (!feed.id || !user.id)
+    {
+        throw new Error("Couldn't find feed/ user id.");
+    }
+
+    const result = await deleteFeedFollow(user.id, feed.id);
+
+    if (!result)
+    {
+        throw new Error("Error happen while deleteing the feed follow.");
+    }
 }
