@@ -2,8 +2,9 @@ import { createFeedFollow, getFeedFollowsForUser } from "../lib/db/queries/feedF
 import { getFeedByURL } from "../lib/db/queries/feeds";
 import { readConfig  } from "../config"
 import { getUser } from "../lib/db/queries/users";
+import { User } from "src/lib/db/schema";
 
-export async function handlerFollow (cmdName: string, ...args: string[]) {
+export async function handlerFollow (cmdName: string,user: User, ...args: string[]) {
     if (args.length !== 1) {
         throw new Error(`usage: ${cmdName} <url>`);
     } 
@@ -18,13 +19,6 @@ export async function handlerFollow (cmdName: string, ...args: string[]) {
         throw new Error("Couldn't find user/feed id whose related to the feed.");
     }
 
-    const currentUserName =  readConfig().currentUserName;
-    const user = await getUser(currentUserName);
-
-    if (!user) {
-        throw new Error("Couldn't found the user.");
-    }
-    
     const feedFollow = await createFeedFollow(user.id,feed.id);
 
     if (!feedFollow) {
@@ -35,14 +29,7 @@ export async function handlerFollow (cmdName: string, ...args: string[]) {
     console.log(feedFollow.userName);
 }
 
-export async function handlerFollowing (cmdName: string) {
-    const currentUserName =  readConfig().currentUserName;
-    const user = await getUser(currentUserName);
-
-    if (!user) {
-        throw new Error("Couldn't found the user.");
-    }
-    
+export async function handlerFollowing (cmdName: string, user: User,) {
     const feedFollows = await getFeedFollowsForUser(user.id);
 
     if (feedFollows.length === 0) {

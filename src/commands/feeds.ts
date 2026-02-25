@@ -10,16 +10,10 @@ export async function handlerAggregate(cmdName: string) {
     console.log(JSON.stringify(await fetchFeed(url), null, 2));
 };
 
-export async function handlerAddFeed (cmdName: string, ...args: string[]) {
+export async function handlerAddFeed (cmdName: string, user: User, ...args: string[]) {
     if (args.length !== 2) {
         throw new Error(`usage: ${cmdName} <name> <url>`);
     } 
-
-    const currentUserName =  readConfig().currentUserName;
-    const user = await getUser(currentUserName);
-    if (!user) {
-        throw new Error("Couldn't found the user who created the feed.");
-    }
 
     const currentUserId: string = user.id; 
     const feed = await createFeed(args[0], args[1], currentUserId);
