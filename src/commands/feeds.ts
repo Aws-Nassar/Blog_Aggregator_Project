@@ -2,6 +2,7 @@ import { fetchFeed } from "../lib/rss";
 import { readConfig  } from "../config"
 import { getUser, getUserById } from "../lib/db/queries/users";
 import { createFeed, getFeeds } from "../lib/db/queries/feeds";
+import { createFeedFollow } from "../lib/db/queries/feedFollows";
 import {User, Feed} from "../lib/db/schema";
 
 export async function handlerAggregate(cmdName: string) {
@@ -21,14 +22,19 @@ export async function handlerAddFeed (cmdName: string, ...args: string[]) {
     }
 
     const currentUserId: string = user.id; 
-    const result = await createFeed(args[0], args[1], currentUserId);
+    const feed = await createFeed(args[0], args[1], currentUserId);
 
-    if (!result)
+    if (!feed)
     {
         throw new Error("This feed already exist.")
     }
-
-    printFeed(result, user);
+    const feedFollow = await createFeedFollow(user.id, feed.id);
+    if (!feedFollow)
+    {
+        throw new Error("Error ouccared wile create the feed follow.")
+    }
+    console.log(feedFollow.feedName);
+    console.log(feedFollow.userName);
 };  
 
 function printFeed(feed: Feed, user:User) {

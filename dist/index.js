@@ -1,5 +1,6 @@
 import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./commands/users";
-import { handlerAggregate } from "./commands/feeds";
+import { handlerAggregate, handlerAddFeed, handlerFeeds } from "./commands/feeds";
+import { handlerFollow } from "./commands/feedFollows";
 import { registerCommand, runCommand } from "./commands/commands";
 import process from "process";
 async function main() {
@@ -9,6 +10,9 @@ async function main() {
     registerCommand(command, "reset", handlerReset);
     registerCommand(command, "users", handlerUsers);
     registerCommand(command, "agg", handlerAggregate);
+    registerCommand(command, "addfeed", handlerAddFeed);
+    registerCommand(command, "feeds", handlerFeeds);
+    registerCommand(command, "feeds", handlerFollow);
     const args = process.argv.slice(2);
     if (args.length < 1) {
         console.log("no command provided");
