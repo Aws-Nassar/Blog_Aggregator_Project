@@ -1,3 +1,4 @@
+import { createPost } from "../lib/db/queries/posts";
 import { getNextFeedToFetch, markFeedFetched } from "../lib/db/queries/feeds";
 import { fetchFeed } from "../lib/rss";
 
@@ -22,7 +23,9 @@ export async function scrapeFeeds() {
     }
 
     for (const item of rssFeed.channel.item) {
-        console.log(item.title);
+        const date = new Date(item.pubDate);
+        const pubDate = isNaN(date.getTime()) ? undefined  : date;
+        await createPost(item.title, item.link, feed.id, item.description, pubDate);
     }
 }
 

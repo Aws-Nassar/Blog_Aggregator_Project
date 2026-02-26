@@ -5,6 +5,7 @@ import { type CommandsRegistry, registerCommand, runCommand } from "./commands/c
 import process from "process";
 import { middlewareLoggedIn } from "./middleware";
 import { handlerAggregate } from "./commands/aggregate";
+import { handlerBrowse } from "./commands/posts";
 
 async function main() {
   let command: CommandsRegistry = {};
@@ -18,6 +19,7 @@ async function main() {
   registerCommand(command, "follow", middlewareLoggedIn(handlerFollow));
   registerCommand(command, "following", middlewareLoggedIn(handlerFollowing));
   registerCommand(command, "unfollow", middlewareLoggedIn(handlerUnFollow));
+  registerCommand(command, "browse", middlewareLoggedIn(handlerBrowse));
   
   const args = process.argv.slice(2);
   if (args.length < 1) {
