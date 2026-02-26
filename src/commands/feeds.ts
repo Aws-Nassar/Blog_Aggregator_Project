@@ -1,13 +1,7 @@
-import { fetchFeed } from "../lib/rss";
 import { getUserById } from "../lib/db/queries/users";
 import { createFeed, getFeeds } from "../lib/db/queries/feeds";
 import { createFeedFollow } from "../lib/db/queries/feedFollows";
-import {User, Feed} from "../lib/db/schema";
-
-export async function handlerAggregate(cmdName: string) {
-    const url = "https://www.wagslane.dev/index.xml";
-    console.log(JSON.stringify(await fetchFeed(url), null, 2));
-};
+import {User} from "../lib/db/schema";
 
 export async function handlerAddFeed (cmdName: string, user: User, ...args: string[]) {
     if (args.length !== 2) {
@@ -30,10 +24,10 @@ export async function handlerAddFeed (cmdName: string, user: User, ...args: stri
     console.log(feedFollow.userName);
 };  
 
-function printFeed(feed: Feed, user:User) {
+/*function printFeed(feed: Feed, user:User) {
     console.log(`User Info: name: ${user.name}, ID: ${user.id}\n has created this/those feed/s:-`);
     console.log(`Feed: ${feed.name}, ${feed.id}, ${feed.url}, created at: ${feed.createdAt}, updated at: ${feed.updatedAt}`);
-}
+}*/
 
 export async function handlerFeeds (cmdName: string) {
     const feeds = await getFeeds();

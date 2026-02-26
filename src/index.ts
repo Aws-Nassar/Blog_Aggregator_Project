@@ -1,9 +1,10 @@
 import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./commands/users";
-import { handlerAggregate, handlerAddFeed, handlerFeeds } from "./commands/feeds";
+import { handlerAddFeed, handlerFeeds } from "./commands/feeds";
 import { handlerFollow, handlerFollowing, handlerUnFollow } from "./commands/feedFollows";
 import { type CommandsRegistry, registerCommand, runCommand } from "./commands/commands"; 
 import process from "process";
 import { middlewareLoggedIn } from "./middleware";
+import { handlerAggregate } from "./commands/aggregate";
 
 async function main() {
   let command: CommandsRegistry = {};
