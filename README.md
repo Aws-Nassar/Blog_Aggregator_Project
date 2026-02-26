@@ -47,7 +47,7 @@ npm run start <command>
 
 ---
 
-## Common Commands
+## Common Commands Example
 
 Register a user:
 
